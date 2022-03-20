@@ -13,11 +13,18 @@ class App extends React.Component {
       // dealercard: null,
       // playercard1: null,
       // playercard2: null,
-
+      //divcontainer:false,
       gameOver: false,
       message: null
     };
+    //this.setState({divcontainer:false})
   }
+
+  startGame(){
+    this.setState({divcontainer:!this.state.divcontainer});
+  }
+
+  
 
   generateDeck() {
     const cards = [2,3,4,5,6,7,8,9,10,'J','Q','K','A'];
@@ -28,7 +35,9 @@ class App extends React.Component {
         deck.push({number: cards[i], suit: suits[j]});
       }
     }
+    
     return deck;
+
   }
   
   dealCards(deck) {
@@ -54,6 +63,8 @@ class App extends React.Component {
   }
 
   startNewGame(type) {
+
+    //this.setState({divcontainer:!this.state.divcontainer})
     if (type === 'continue') {
       if (this.state.wallet > 0) {
         const deck = (this.state.deck.length < 10) ? this.generateDeck() : this.state.deck;
@@ -63,9 +74,11 @@ class App extends React.Component {
           deck: updatedDeck,
           dealer,
           player,
-          currentBet: null,
+          // currentBet: null,
+          //divcontainer:!this.state.divcontainer,
           gameOver: false,
-          message: null
+          message: null,
+          
         });
       } else {
         this.setState({ message: 'Game over! You are broke! Please start a new game.' });
@@ -78,11 +91,14 @@ class App extends React.Component {
         deck: updatedDeck,
         dealer,
         player,
-        wallet: 100,
-        inputValue: '',
-        currentBet: null,
+        // wallet: 100,
+        // inputValue: '',
+        // currentBet: null,
+        //divcontainer:!this.state.divcontainer,
         gameOver: false,
-        message: null
+        message: null,
+        
+        
       });
     }
   }
@@ -195,7 +211,8 @@ class App extends React.Component {
           // deck, 
           dealer,
           gameOver: true,
-          message
+          message,
+          
         });
     } else {
       this.setState({ message: 'Game over! Please start a new game.' });
@@ -267,14 +284,19 @@ class App extends React.Component {
     //   }
     // }
 
+    
+    const x =this.state.divcontainer;
+
     return (
       <div>
+        <button onClick={() => {this.startGame()}}>Start</button>
+        {x &&(
         <div className="buttons">
           <button onClick={() => {this.startNewGame()}}>New Game</button>
           <button onClick={() => {this.check()}}>Check</button>
           <button onClick={() => {this.stand()}}>Fold</button>
         </div>
-        
+        )}
         {/* <p>Wallet: ${ this.state.wallet }</p> */}
         {
           // !this.state.currentBet ? 
@@ -294,6 +316,9 @@ class App extends React.Component {
           </div>
           : null
         }
+        
+        {x &&(
+        <div>
         <p>Your Hand ({ this.state.player.count })</p>
         <table className="cards">
           <tr>
@@ -313,6 +338,7 @@ class App extends React.Component {
         </table>
         
         <p>{ this.state.message }</p>
+        </div>)}
       </div>
     );
   }
