@@ -208,17 +208,41 @@ class App extends React.Component {
     const playercard1 = this.state.player.cards[0].number;
     const playercard2 = this.state.player.cards[1].number;
 
-    if (playercard1 > playercard2){
-      console.log(playercard1)
-      console.log(playercard2)
+    const p1 = 0;
+    const p2 = 0;
 
-      const temp = playercard1;
-      const temp1 = playercard2;
+    if(playercard1 === 'A'){
+      p1 = 1;
+    } else if (playercard1 === 'J'){
+      p1 = 11;
+    } else if (playercard1 === 'Q'){
+      p1 = 12;
+    } else if (playercard1 === 'K'){
+      p1 = 13;
+    }
+
+    if(playercard2 === 'A'){
+      p2 = 1;
+    } else if (playercard2 === 'J'){
+      p2 = 11;
+    } else if (playercard2 === 'Q'){
+      p2 = 12;
+    } else if (playercard2 === 'K'){
+      p2 = 13;
+    }
+
+    if (p1 > p2){
+      console.log(p1 > p2)
+
+      const temp = p1;
+      const temp1 = p2;
 
       console.log(temp)
       console.log(temp1)
 
-      if(dealercard > playercard1 && dealercard < playercard2){ 
+      console.log(dealercard > temp1 && dealercard < temp)
+
+      if(dealercard > temp1 && dealercard < temp){ 
         return 'player';
       } else if (dealercard < temp1 || dealercard > temp) {
         return 'dealer';
@@ -237,7 +261,7 @@ class App extends React.Component {
   
   handleKeyDown(e) {
     const enter = 13;
-    console.log(e.keyCode);
+    // console.log(e.keyCode);
     
     if (e.keyCode === enter) {
       this.placeBet();
