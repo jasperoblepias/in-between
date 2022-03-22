@@ -1,5 +1,6 @@
 import './css/App.css';
 import React from 'react';
+import { type } from '@testing-library/user-event/dist/type';
 
 class App extends React.Component {
   constructor(props) {
@@ -9,22 +10,27 @@ class App extends React.Component {
       deck: [],
       dealer: null,
       player: null,
-
-      // dealercard: null,
-      // playercard1: null,
-      // playercard2: null,
-      //divcontainer:false,
+      disable:false,
       gameOver: false,
-      message: null
+      message: null,
+      isDisabled:false,
     };
+    
     //this.setState({divcontainer:false})
   }
 
+
+  
   startGame(){
-    this.setState({divcontainer:!this.state.divcontainer});
+    
+    this.setState({
+      divcontainer:!this.state.divcontainer,
+      isDisabled: true
+    });
   }
 
   
+
 
   generateDeck() {
     const cards = [2,3,4,5,6,7,8,9,10,'J','Q','K','A'];
@@ -35,9 +41,7 @@ class App extends React.Component {
         deck.push({number: cards[i], suit: suits[j]});
       }
     }
-    
     return deck;
-
   }
   
   dealCards(deck) {
@@ -338,10 +342,11 @@ class App extends React.Component {
 
     
     const x =this.state.divcontainer;
-
+    
     return (
       <div>
-        <button onClick={() => {this.startGame()}}>Start</button>
+        <button className='startBtn' disabled={this.state.isDisabled}
+         onClick={ this.startGame.bind(this)}>Start</button>
         {x &&(
         <div className="buttons">
           <button onClick={() => {this.startNewGame()}}>New Game</button>
