@@ -1,5 +1,5 @@
 import './css/App.css';
-import React, { Component } from 'react';
+import React from 'react';
 
 class App extends React.Component {
   constructor(props) {
@@ -45,7 +45,7 @@ class App extends React.Component {
     const dealerCard1 = this.getRandomCard(playerCard1.updatedDeck);
     const playerCard2 = this.getRandomCard(dealerCard1.updatedDeck);    
     const playerStartingHand = [playerCard1.randomCard, playerCard2.randomCard];
-    const dealerStartingHand = [dealerCard1.randomCard, {}];
+    const dealerStartingHand = [dealerCard1.randomCard,];
     
     // console.log(playerStartingHand)
 
@@ -64,25 +64,25 @@ class App extends React.Component {
 
   startNewGame(type) {
 
-    //this.setState({divcontainer:!this.state.divcontainer})
+    // this.setState({divcontainer:!this.state.divcontainer})
     if (type === 'continue') {
-      if (this.state.wallet > 0) {
-        const deck = (this.state.deck.length < 10) ? this.generateDeck() : this.state.deck;
-        const { updatedDeck, player, dealer } = this.dealCards(deck);
+        if(this.state.deck.length > 2){
+          const deck = (this.state.deck.length < 2) ? this.generateDeck() : this.state.deck;
+          const { updatedDeck, player, dealer } = this.dealCards(deck);
+          this.setState({
+            deck: updatedDeck,
+            dealer,
+            player,
+            // currentBet: null,
+            //divcontainer:!this.state.divcontainer,
+            gameOver: false,
+            message: null,
+            
+          });
+        } else {
+          this.setState({ message: 'Game over! Please start a new game.' });
+        }
 
-        this.setState({
-          deck: updatedDeck,
-          dealer,
-          player,
-          // currentBet: null,
-          //divcontainer:!this.state.divcontainer,
-          gameOver: false,
-          message: null,
-          
-        });
-      } else {
-        this.setState({ message: 'Game over! You are broke! Please start a new game.' });
-      }
     } else {
       const deck = this.generateDeck();
       const { updatedDeck, player, dealer } = this.dealCards(deck);
@@ -151,13 +151,7 @@ class App extends React.Component {
   //   }
   // }
 
-  check(){
-      // reveal yung dealears card
-      // check kung panalo or hindi
-      if (!this.state.gameOver){
 
-      } 
-  }
   
   dealerDraw(dealer, deck) {
     const { randomCard, updatedDeck } = this.getRandomCard(deck);
@@ -190,23 +184,20 @@ class App extends React.Component {
     }, 0);
   }
   
-  stand() {
+  check(){
     if (!this.state.gameOver) {
-      // Show dealer's 2nd card
-      // const randomCard = this.getRandomCard(this.state.deck);
-      // let deck = randomCard.updatedDeck;
+
+
       let dealer = this.state.dealer;
 
         const winner = this.getWinner(dealer, this.state.player);
         let message;
         
-        if (winner === 'dealer') {
-          message = 'Dealer wins...';
-        } else if (winner === 'player') {
-          message = 'You win!';
+        if (winner === 'player') {
+          message = 'You Win';
         } else {
-          message = 'Push.';
-        }
+          message = 'Dealer wins...';
+        } 
         this.setState({
           // deck, 
           dealer,
@@ -214,10 +205,32 @@ class App extends React.Component {
           message,
           
         });
+
+        
+    } 
+
+}
+
+  fold() {
+
+    if (this.state.deck.length < 2){
+      this.setState({ message: 'Game over! Please start a new game.'});
     } else {
-      this.setState({ message: 'Game over! Please start a new game.' });
+      const deck = (this.state.deck.length < 2) ? this.generateDeck() : this.state.deck;
+      const { updatedDeck, player, dealer } = this.dealCards(deck);
+      this.setState({
+        deck: updatedDeck,
+        dealer,
+        player,
+        // currentBet: null,
+        //divcontainer:!this.state.divcontainer,
+        gameOver: false,
+        message: null,
+        
+      });
     }
-  }
+    }
+
   
   getWinner(dealer, player) {
     // dealer card < playercard 1 && dealer card > platyercard 2
@@ -225,8 +238,21 @@ class App extends React.Component {
     const playercard1 = this.state.player.cards[0].number;
     const playercard2 = this.state.player.cards[1].number;
 
-    const p1 = 0;
-    const p2 = 0;
+    let p1;
+    let p2;
+    let d1;
+
+    if(dealercard === 'A'){
+      d1 = 1;
+    } else if (dealercard === 'J'){
+      d1 = 11;
+    } else if (dealercard === 'Q'){
+      d1 = 12;
+    } else if (dealercard === 'K'){
+      d1 = 13;
+    } else {
+      d1 = dealercard
+    }
 
     if(playercard1 === 'A'){
       p1 = 1;
@@ -236,6 +262,8 @@ class App extends React.Component {
       p1 = 12;
     } else if (playercard1 === 'K'){
       p1 = 13;
+    } else {
+      p1 = playercard1
     }
 
     if(playercard2 === 'A'){
@@ -246,27 +274,27 @@ class App extends React.Component {
       p2 = 12;
     } else if (playercard2 === 'K'){
       p2 = 13;
+    } else {
+      p2 = playercard2
     }
 
     if (p1 > p2){
-      console.log(p1 > p2)
-
       const temp = p1;
       const temp1 = p2;
 
-      console.log(temp)
-      console.log(temp1)
-
-      console.log(dealercard > temp1 && dealercard < temp)
-
-      if(dealercard > temp1 && dealercard < temp){ 
+      if(d1 > temp1 && d1 < temp){ 
         return 'player';
-      } else if (dealercard < temp1 || dealercard > temp) {
-        return 'dealer';
       } else {
-        return 'push';
-      }
-    } 
+        return 'dealer';
+      } 
+    } else {
+
+      if(d1 > p1 && d1 < p2){ 
+        return 'player';
+      } else {
+        return 'dealer';
+      } 
+    }
 
 
   }
@@ -318,21 +346,10 @@ class App extends React.Component {
         <div className="buttons">
           <button onClick={() => {this.startNewGame()}}>New Game</button>
           <button onClick={() => {this.check()}}>Check</button>
-          <button onClick={() => {this.stand()}}>Fold</button>
+          <button onClick={() => {this.fold()}}>Fold</button>
         </div>
         )}
-        {/* <p>Wallet: ${ this.state.wallet }</p> */}
-        {
-          // !this.state.currentBet ? 
-          // <div className="input-bet">            
-          //   <form>
-          //     <input type="text" name="bet" placeholder="" value={this.state.inputValue} onChange={this.inputChange.bind(this)}/>
-          //   </form>
-          //   <button onClick={() => {this.placeBet()}}>Place Bet</button> 
-          //   {/* Button place bet */}
-          // </div>
-          // : null
-        }
+
         {
           this.state.gameOver ?
           <div className="buttons">
@@ -343,7 +360,7 @@ class App extends React.Component {
         
         {x &&(
         <div>
-        <p>Your Hand ({ this.state.player.count })</p>
+        <p>Your Hand</p>
         <table className="cards">
           <tr>
             { this.state.player.cards.map((card, i) => {
@@ -352,7 +369,7 @@ class App extends React.Component {
           </tr>
         </table>
         
-        <p>Dealer's Hand ({ this.state.dealer.count })</p>
+        <p>Dealer's Hand </p>
         <table className="cards">
           <tr>
             { this.state.dealer.cards.map((card, i) => {
