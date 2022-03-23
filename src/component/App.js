@@ -1,6 +1,7 @@
 import './css/App.css';
 import React from 'react';
 import Flippy, { FrontSide, BackSide } from 'react-flippy';
+import Backcard from './images/card.jpg';
 
 class App extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class App extends React.Component {
       gameOver: false,
       message: null,
       isDisabled: false,
+      isFlipped: false
     };
 
     //this.setState({divcontainer:false})
@@ -298,9 +300,17 @@ class App extends React.Component {
             <p>Dealer's Hand </p>
             <table className="cards">
               <tr>
-                {this.state.dealer.cards.map((card, i) => {
-                  return <Card key={i} number={card.number} suit={card.suit} />;
-                })}
+                {/* <Flippy flipDirection="horizontal">
+                  <FrontSide className="cardStyle">
+                    <img src={Backcard} alt="this is car image" style={{ width: '105px', height: '150px' }} />
+                  </FrontSide>
+                  <BackSide className="cardStyle"> */}
+                    {this.state.dealer.cards.map((card, i) => {
+                      return <Card key={i} number={card.number} suit={card.suit} />;
+                    })}
+{/* 
+                  </BackSide >
+                </Flippy> */}
               </tr>
             </table>
 
@@ -313,12 +323,12 @@ class App extends React.Component {
               </tr>
             </table>
 
-            <p>{this.state.message}</p>
-
             <div className="buttons">
               <button onClick={() => { this.check() }}>Check</button>
               <button onClick={() => { this.fold() }}>Fold</button>
             </div>
+
+            <p>{this.state.message}</p>
           </div>)}
       </div>
     );
@@ -332,24 +342,17 @@ const Card = ({ number, suit }) => {
 
   return (
     <td>
-      <Flippy
-        flipOnHover={true}
-        flipDirection="horizontal"
-        // style={{ width: '105px', height: '150px' ,}}
-      >
-        <FrontSide style={{ width: '105px', height: '150px'}}>
-          {/* <img src='/component/images/card.jpg'> </img> */}
-        
+      <Flippy flipOnHover={true} flipDirection="horizontal">
+        <FrontSide className="cardStyle">
+          <img src={Backcard} alt="this is car image" style={{ width: '105px', height: '150px' }} />
         </FrontSide>
-
-        <BackSide
-          style={{}}>
-             <div className={color}>
+        <BackSide className="cardStyle">
+          <div className={color}>
             <div className="upperleft"> {combo} </div>
             <div className="center"> {shape} </div>
             <div className="bottomright"> {combo} </div>
           </div>
-        </BackSide>
+        </BackSide >
       </Flippy>
 
     </td>
@@ -358,22 +361,3 @@ const Card = ({ number, suit }) => {
 
 
 export default App;
-
-
-{/* 
-<Flippy
-flipOnHover={true}
-flipDirection="horizontal"
->
-
-<FrontSide>
-
-RICK
-</FrontSide>
-
-<BackSide
-  style={{ backgroundColor: '#175852'}}>
-  ROCKS
-</BackSide>
-</Flippy> 
-*/}
