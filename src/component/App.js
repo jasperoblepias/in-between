@@ -272,18 +272,18 @@ class App extends React.Component {
 
     return (
       <div>
-        <button className='startBtn' disabled={this.state.isDisabled}
+        <button className='buttons' id='startBtn' disabled={this.state.isDisabled}
           onClick={this.startGame.bind(this)}>Start</button>
         {x && (
-          <div className="buttons">
-            <button onClick={() => { this.startNewGame() }}>New Game</button>
+          <div className="buttondiv">
+            <button className='buttons' id='newgame' onClick={() => { this.startNewGame() }}>New Game</button>
           </div>
         )}
 
         {x && (
           <div>
-
-            <p>Dealer's Hand </p>
+            
+            <p className='dealerHand'>Dealer's Hand </p>
             <table className="cards">
               <tr>
                 <Flippy
@@ -305,8 +305,8 @@ class App extends React.Component {
                 </Flippy>
               </tr>
             </table>
-
-            <p>Your Hand</p>
+            <p className='message'>{this.state.message}</p>
+            <p className='playerHand'>Your Hand</p>
             <table className="cards">
               <tr>
                 {this.state.player.cards.map((card, i) => { 
@@ -315,21 +315,21 @@ class App extends React.Component {
               </tr>
             </table>
 
-            <div className="buttons">
-              <button onClick={() => { this.check(); this.flippyHorizontal.toggle(); }}>Check</button>
-              <button onClick={() => { this.fold(); this.flippyHorizontal.toggle(); }}>Fold</button>
+            <div className="buttondiv">
+              <button className='buttons' id='check' onClick={() => { this.check(); this.flippyHorizontal.toggle(); }}>Check</button>
+              <button className='buttons' id='fold' onClick={() => { this.fold(); this.flippyHorizontal.toggle(); }}>Fold</button>
             </div>
 
             {
               this.state.gameOver ?
 
-                <div className="buttons">
-                  <button onClick={() => { this.startNewGame('continue'); this.flippyHorizontal.toggle(); }}>Continue</button>
+                <div className="buttondiv">
+                  <button className='buttons' id='continue' onClick={() => { this.startNewGame('continue'); this.flippyHorizontal.toggle(); }}>Continue</button>
                 </div>
                 : null
             }
 
-            <p>{this.state.message}</p>
+            
           </div>)}
       </div>
     );

@@ -1,11 +1,14 @@
-body {
-  font-family: 'Lucida Sans Unicode';
+body  {
+  font-family: 'Sancreek', cursive;
+  font-size: 36px;
+  color: white; 
+  -webkit-text-stroke:black .8px;
   background: #4CA1AF;
   background: -webkit-linear-gradient(to left, #4CA1AF , #C4E0E5);
   background: linear-gradient(to left, #4CA1AF , #C4E0E5);
-  /* background-image: url("/src/component/images/inuman.png");
+  background-image: url("/src/component/images/bgim.jpg");
   background-repeat: no-repeat;
-  background-size:cover; */
+  background-size:cover;
 }
 
 button {
@@ -24,11 +27,13 @@ h1 {
 
 p {
   text-align: center;
+  margin: 10px;
 }
 
-.buttons {
+.buttondiv {
   display: flex;
   justify-content: center;
+ 
 }
 
 .card, .card-red {
@@ -48,20 +53,21 @@ p {
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
+  color: black;
+  font-size: 15px;
+  -webkit-text-stroke: black 0px
   /* margin-left: 10px; */
-
 }
 
 .card-red {
   color: red;
+  -webkit-text-stroke: red .1px;
   
 }
 
 .cards {
-  margin: 0 auto;
+  margin: auto; 
 }
-
-
 
 .center{
   display: flex;
@@ -84,4 +90,100 @@ p {
 
 .flippyIsActivated{
 
+}
+
+.buttons {
+  align-items: center;
+  background-color: #FF3333;
+  border: 0;
+  border-radius: 100px;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: -apple-system, system-ui, system-ui, "Segoe UI", Roboto, "Helvetica Neue", "Fira Sans", Ubuntu, Oxygen, "Oxygen Sans", Cantarell, "Droid Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 100;
+  justify-content: center;
+  line-height: 20px;
+  max-width: 480px;
+  min-height: 40px;
+  min-width: 0px;
+  overflow: hidden;
+  padding: 0px;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: center;
+  touch-action: manipulation;
+  transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  font-family: 'Sancreek',cursive;
+  -webkit-text-stroke: white 0px;
+  
+
+}
+
+.buttons:hover,
+.buttons:focus { 
+  background-color: #990000;
+  color: #ffffff;
+}
+
+.buttons:active {
+  background: #660000;
+  color: #808080;
+}
+
+.buttons:disabled { 
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, .08);
+  color: rgba(0, 0, 0, .3);
+}
+
+#startBtn:disabled{
+  display: none;
+}
+
+#startBtn{
+  padding: 32px;
+  font-size: 48px;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-weight: lighter;
+}
+
+#newgame{
+  margin-top: 20px;
+}
+
+#check{
+
+}
+
+#fold{
+ 
+}
+
+#continue{
+  margin-top: 10px;
+  align: right;
+}
+
+.dealerHand{
+  margin:0 auto;
+}
+
+.playerHand{
+  margin:0 auto;
+}
+
+.message{
+  margin:20px;
+  
 }
