@@ -1,6 +1,6 @@
 import './css/App.css';
 import React from 'react';
-import { type } from '@testing-library/user-event/dist/type';
+import Flippy, { FrontSide, BackSide } from 'react-flippy';
 
 class App extends React.Component {
   constructor(props) {
@@ -281,8 +281,6 @@ class App extends React.Component {
         {x && (
           <div className="buttons">
             <button onClick={() => { this.startNewGame() }}>New Game</button>
-            <button onClick={() => { this.check() }}>Check</button>
-            <button onClick={() => { this.fold() }}>Fold</button>
           </div>
         )}
 
@@ -296,14 +294,6 @@ class App extends React.Component {
 
         {x && (
           <div>
-            <p>Your Hand</p>
-            <table className="cards">
-              <tr>
-                {this.state.player.cards.map((card, i) => {
-                  return <Card key={i} number={card.number} suit={card.suit} />
-                })}
-              </tr>
-            </table>
 
             <p>Dealer's Hand </p>
             <table className="cards">
@@ -314,7 +304,21 @@ class App extends React.Component {
               </tr>
             </table>
 
+            <p>Your Hand</p>
+            <table className="cards">
+              <tr>
+                {this.state.player.cards.map((card, i) => {
+                  return <Card key={i} number={card.number} suit={card.suit} />;
+                })}
+              </tr>
+            </table>
+
             <p>{this.state.message}</p>
+
+            <div className="buttons">
+              <button onClick={() => { this.check() }}>Check</button>
+              <button onClick={() => { this.fold() }}>Fold</button>
+            </div>
           </div>)}
       </div>
     );
@@ -323,16 +327,53 @@ class App extends React.Component {
 
 const Card = ({ number, suit }) => {
   const combo = (number) ? `${number}${suit}` : null;
+  const shape = (number) ? `${suit}` : null;
   const color = (suit === '♦' || suit === '♥') ? 'card-red' : 'card';
 
   return (
     <td>
-      <div className={color}>
-        {combo}
-      </div>
+      <Flippy
+        flipOnHover={true}
+        flipDirection="horizontal"
+        // style={{ width: '105px', height: '150px' ,}}
+      >
+        <FrontSide style={{ width: '105px', height: '150px'}}>
+          {/* <img src='/component/images/card.jpg'> </img> */}
+        
+        </FrontSide>
+
+        <BackSide
+          style={{}}>
+             <div className={color}>
+            <div className="upperleft"> {combo} </div>
+            <div className="center"> {shape} </div>
+            <div className="bottomright"> {combo} </div>
+          </div>
+        </BackSide>
+      </Flippy>
+
     </td>
   );
 };
 
 
 export default App;
+
+
+{/* 
+<Flippy
+flipOnHover={true}
+flipDirection="horizontal"
+>
+
+<FrontSide>
+
+RICK
+</FrontSide>
+
+<BackSide
+  style={{ backgroundColor: '#175852'}}>
+  ROCKS
+</BackSide>
+</Flippy> 
+*/}
