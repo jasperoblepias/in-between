@@ -15,13 +15,13 @@ class App extends React.Component {
       gameOver: false,
       message: null,
       isDisabled: false,
-      isFlipped: false
+      // isFlipped: false,
     };
+
+
 
     //this.setState({divcontainer:false})
   }
-
-
 
   startGame() {
 
@@ -145,7 +145,6 @@ class App extends React.Component {
   check() {
     if (!this.state.gameOver) {
 
-
       let dealer = this.state.dealer;
 
       const winner = this.getWinner(dealer, this.state.player);
@@ -171,19 +170,14 @@ class App extends React.Component {
 
   fold() {
 
-    if (this.state.deck.length < 2) {
-      this.setState({ message: 'Game over! Please start a new game.' });
-    } else {
-      const deck = (this.state.deck.length < 2) ? this.generateDeck() : this.state.deck;
-      const { updatedDeck, player, dealer } = this.dealCards(deck);
+    // if (this.state.deck.length < 2) {
+    //   this.setState({ message: 'Game over! Please start a new game.' });
+    // } else {
       this.setState({
-        deck: updatedDeck,
-        dealer,
-        player,
-        message: null,
+        gameOver: true,
 
       });
-    }
+    // }
   }
 
 
@@ -286,47 +280,54 @@ class App extends React.Component {
           </div>
         )}
 
-        {
-          this.state.gameOver ?
-            <div className="buttons">
-              <button onClick={() => { this.startNewGame('continue') }}>Continue</button>
-            </div>
-            : null
-        }
-
         {x && (
           <div>
 
             <p>Dealer's Hand </p>
             <table className="cards">
               <tr>
-                {/* <Flippy flipDirection="horizontal">
-                  <FrontSide className="cardStyle">
+                <Flippy
+                  id="flippyIsActivated"
+                  ref={(r) => this.flippyHorizontal = r}
+                  flipOnHover={false}
+                  flipOnClick={false}
+                  flipDirection="horizontal">
+
+                  <FrontSide className="cardStyle" animationDuration={300}>
                     <img src={Backcard} alt="this is car image" style={{ width: '105px', height: '150px' }} />
                   </FrontSide>
-                  <BackSide className="cardStyle"> */}
+                  <BackSide className="cardStyle" animationDuration={300}>
                     {this.state.dealer.cards.map((card, i) => {
-                      return <Card key={i} number={card.number} suit={card.suit} />;
+                      return <CardDealer key={i} number={card.number} suit={card.suit} />
                     })}
-{/* 
+
                   </BackSide >
-                </Flippy> */}
+                </Flippy>
               </tr>
             </table>
 
             <p>Your Hand</p>
             <table className="cards">
               <tr>
-                {this.state.player.cards.map((card, i) => {
+                {this.state.player.cards.map((card, i) => { 
                   return <Card key={i} number={card.number} suit={card.suit} />;
                 })}
               </tr>
             </table>
 
             <div className="buttons">
-              <button onClick={() => { this.check() }}>Check</button>
-              <button onClick={() => { this.fold() }}>Fold</button>
+              <button onClick={() => { this.check(); this.flippyHorizontal.toggle(); }}>Check</button>
+              <button onClick={() => { this.fold(); this.flippyHorizontal.toggle(); }}>Fold</button>
             </div>
+
+            {
+              this.state.gameOver ?
+
+                <div className="buttons">
+                  <button onClick={() => { this.startNewGame('continue'); this.flippyHorizontal.toggle(); }}>Continue</button>
+                </div>
+                : null
+            }
 
             <p>{this.state.message}</p>
           </div>)}
@@ -342,9 +343,13 @@ const Card = ({ number, suit }) => {
 
   return (
     <td>
-      <Flippy flipOnHover={true} flipDirection="horizontal">
+      <Flippy
+        // ref={(r) => this.flippyHorizontal = r}
+        flipOnHover={true}
+        flipOnClick={false}
+        flipDirection="horizontal">
         <FrontSide className="cardStyle">
-          <img src={Backcard} alt="this is car image" style={{ width: '105px', height: '150px' }} />
+          <img src={Backcard} alt="backcard" style={{ width: '105px', height: '150px' }} />
         </FrontSide>
         <BackSide className="cardStyle">
           <div className={color}>
@@ -354,6 +359,24 @@ const Card = ({ number, suit }) => {
           </div>
         </BackSide >
       </Flippy>
+
+    </td>
+  );
+};
+
+
+const CardDealer = ({ number, suit }) => {
+  const combo = (number) ? `${number}${suit}` : null;
+  const shape = (number) ? `${suit}` : null;
+  const color = (suit === '♦' || suit === '♥') ? 'card-red' : 'card';
+
+  return (
+    <td>
+      <div className={color}>
+        <div className="upperleft"> {combo} </div>
+        <div className="center"> {shape} </div>
+        <div className="bottomright"> {combo} </div>
+      </div>
 
     </td>
   );
