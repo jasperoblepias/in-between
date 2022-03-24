@@ -17,36 +17,52 @@ class App extends React.Component {
       isDisabled: false,
       buttonDisable: false,
       buttonEnable: false
-      // isFlipped: false,
     };
-    
-
-
-    //this.setState({divcontainer:false})
   }
 
+  //start new game
   startGame() {
-
     this.setState({
       divcontainer: !this.state.divcontainer,
       isDisabled: true
     });
   }
 
-  disableButton(){
+  //disables button check and fold
+  disableButton() {
     this.setState({
       buttonDisable: true
     });
   }
 
-  enableButton(){
+  //enables button check and fold
+  enableButton() {
     this.setState({
       buttonDisable: false
     });
   }
 
+  //hide all buttons except new game
+    hideRemove(){
+    const checkBtn = document.getElementById('check')
+    const foldBtn = document.getElementById('fold')
+    const continueBtn = document.getElementById('continue')
+    checkBtn.classList.remove('hide')
+    foldBtn.classList.remove('hide')
+    continueBtn.classList.remove('hide')
+  }
+  
+  //add check fold buttons
+  addRemove(){
+    const checkBtn = document.getElementById('check')
+    const foldBtn = document.getElementById('fold')
+    const continueBtn = document.getElementById('continue')
+    checkBtn.classList.add('hide')
+    foldBtn.classList.add('hide')
+    continueBtn.classList.add('hide')
+  }
 
-
+  //generates the whole deck
   generateDeck() {
     const cards = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'];
     const suits = ['♦', '♣', '♥', '♠'];
@@ -59,28 +75,29 @@ class App extends React.Component {
     return deck;
   }
 
+  //give 2 cards to player and 1 card to dealer
   dealCards(deck) {
     const playerCard1 = this.getRandomCard(deck);
+    
     const dealerCard1 = this.getRandomCard(playerCard1.updatedDeck);
     const playerCard2 = this.getRandomCard(dealerCard1.updatedDeck);
     const playerStartingHand = [playerCard1.randomCard, playerCard2.randomCard];
     const dealerStartingHand = [dealerCard1.randomCard,];
 
     const player = {
-      cards: playerStartingHand,
-      count: this.getCount(playerStartingHand)
+      cards: playerStartingHand
     };
     const dealer = {
-      cards: dealerStartingHand,
-      count: this.getCount(dealerStartingHand)
+      cards: dealerStartingHand
     };
 
 
     return { updatedDeck: playerCard2.updatedDeck, player, dealer };
   }
 
+  //checks the status of the game whether the continue button is clicked or not
   startNewGame(type) {
-    // this.setState({divcontainer:!this.state.divcontainer})
+
     if (type === 'continue') {
       if (this.state.deck.length > 2) {
         const deck = (this.state.deck.length < 2) ? this.generateDeck() : this.state.deck;
@@ -89,18 +106,17 @@ class App extends React.Component {
           deck: updatedDeck,
           dealer,
           player,
-          // currentBet: null,
-          //divcontainer:!this.state.divcontainer,
           gameOver: false,
           message: null,
 
         });
       } else {
-        this.setState({ 
+        this.setState({
           message: 'Game over! Out of cards. Please start a new game.',
-         });
-      }
+        });
+        this.addRemove();
 
+      }
     } else {
       const deck = this.generateDeck();
       const { updatedDeck, player, dealer } = this.dealCards(deck);
@@ -109,7 +125,6 @@ class App extends React.Component {
         deck: updatedDeck,
         dealer,
         player,
-        //divcontainer:!this.state.divcontainer,
         gameOver: false,
         message: null,
       });
@@ -127,33 +142,10 @@ class App extends React.Component {
   dealerDraw(dealer, deck) {
     const { randomCard, updatedDeck } = this.getRandomCard(deck);
     dealer.cards.push(randomCard);
-    dealer.count = this.getCount(dealer.cards);
     return { dealer, updatedDeck };
   }
 
-  getCount(cards) {
-    const rearranged = [];
-    cards.forEach(card => {
-      if (card.number === 'A') {
-        rearranged.push(card);
-      } else if (card.number) {
-        rearranged.unshift(card);
-      }
-
-
-    });
-
-    return rearranged.reduce((total, card) => {
-      if (card.number === 'J' || card.number === 'Q' || card.number === 'K') {
-        return total + 10;
-      } else if (card.number === 'A') {
-        return (total + 11 <= 21) ? total + 11 : total + 1;
-      } else {
-        return total + card.number;
-      }
-    }, 0);
-  }
-
+  //checks the dealers and players card
   check() {
     if (!this.state.gameOver) {
 
@@ -167,32 +159,23 @@ class App extends React.Component {
       } else {
         message = 'Dealer wins...';
       }
-      this.setState({
-        // deck, 
+      this.setState({ 
         dealer,
         gameOver: true,
         message,
-
       });
-
-
     }
-
   }
 
+  //forfeit the card
   fold() {
+    this.setState({
+      gameOver: true,
 
-    // if (this.state.deck.length < 2) {
-    //   this.setState({ message: 'Game over! Please start a new game.' });
-    // } else {
-      this.setState({
-        gameOver: true,
-
-      });
-    // }
+    });
   }
 
-
+  //checks both player and dealers card to get winner
   getWinner(dealer, player) {
     const dealercard = this.state.dealer.cards[0].number;
     const playercard1 = this.state.player.cards[0].number;
@@ -259,23 +242,9 @@ class App extends React.Component {
 
   }
 
-  inputChange(e) {
-    const inputValue = +e.target.value;
-    this.setState({ inputValue });
-  }
-
-  handleKeyDown(e) {
-    const enter = 13;
-
-    if (e.keyCode === enter) {
-      this.placeBet();
-    }
-  }
-
   componentWillMount() {
     this.startNewGame();
     const body = document.querySelector('body');
-    body.addEventListener('keydown', this.handleKeyDown.bind(this));
   }
 
   render() {
@@ -288,13 +257,13 @@ class App extends React.Component {
           onClick={this.startGame.bind(this)}>Start</button>
         {x && (
           <div className="buttondiv">
-            <button className='buttons' id='newgame' onClick={() => { this.startNewGame() }}>New Game</button>
+            <button className='buttons' id='newgame' onClick={() => { this.startNewGame(); this.hideRemove(); }}>New Game</button>
           </div>
         )}
 
         {x && (
           <div>
-            
+
             <p className='dealerHand'>Dealer's Hand </p>
             <table className="cards">
               <tr>
@@ -321,27 +290,54 @@ class App extends React.Component {
             <p className='playerHand'>Your Hand</p>
             <table className="cards">
               <tr>
-                {this.state.player.cards.map((card, i) => { 
+                {this.state.player.cards.map((card, i) => {
                   return <Card key={i} number={card.number} suit={card.suit} />;
                 })}
               </tr>
             </table>
 
             <div className="buttondiv">
-              <button className='buttons' id='check' disabled={this.state.buttonDisable} onClick={() => { this.check(); this.flippyHorizontal.toggle(); this.disableButton() }}>Check</button>
-              <button className='buttons' id='fold' disabled={this.state.buttonDisable} onClick={() => { this.fold(); this.flippyHorizontal.toggle();this.disableButton() }}>Fold</button>
+              <button
+                className='buttons'
+                id='check'
+                disabled={this.state.buttonDisable}
+                onClick={() => {
+                  this.check();
+                  this.flippyHorizontal.toggle();
+                  this.disableButton()
+                }}>Check
+              </button>
+
+              <button
+                className='buttons'
+                id='fold'
+                disabled={this.state.buttonDisable}
+                onClick={() => {
+                  this.fold();
+                  this.flippyHorizontal.toggle();
+                  this.disableButton()
+                }}>Fold
+              </button>
             </div>
 
             {
               this.state.gameOver ?
 
                 <div className="buttondiv">
-                  <button className='buttons' id='continue' disabled={!this.state.buttonDisable} onClick={() => { this.startNewGame('continue'); this.flippyHorizontal.toggle(); this.enableButton() }}>Continue</button>
+                  <button
+                    className='buttons'
+                    id='continue'
+                    disabled={!this.state.buttonDisable}
+                    onClick={() => {
+                      this.startNewGame('continue');
+                      this.flippyHorizontal.toggle();
+                      this.enableButton()
+                    }}>Continue
+                  </button>
                 </div>
                 : null
             }
 
-            
           </div>)}
       </div>
     );
@@ -356,7 +352,6 @@ const Card = ({ number, suit }) => {
   return (
     <td>
       <Flippy
-        // ref={(r) => this.flippyHorizontal = r}
         flipOnHover={true}
         flipOnClick={false}
         flipDirection="horizontal">
