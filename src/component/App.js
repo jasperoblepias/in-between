@@ -15,9 +15,11 @@ class App extends React.Component {
       gameOver: false,
       message: null,
       isDisabled: false,
+      buttonDisable: false,
+      buttonEnable: false
       // isFlipped: false,
     };
-
+    
 
 
     //this.setState({divcontainer:false})
@@ -31,6 +33,17 @@ class App extends React.Component {
     });
   }
 
+  disableButton(){
+    this.setState({
+      buttonDisable: true
+    });
+  }
+
+  enableButton(){
+    this.setState({
+      buttonDisable: false
+    });
+  }
 
 
 
@@ -67,7 +80,6 @@ class App extends React.Component {
   }
 
   startNewGame(type) {
-
     // this.setState({divcontainer:!this.state.divcontainer})
     if (type === 'continue') {
       if (this.state.deck.length > 2) {
@@ -84,7 +96,9 @@ class App extends React.Component {
 
         });
       } else {
-        this.setState({ message: 'Game over! Please start a new game.' });
+        this.setState({ 
+          message: 'Game over! Out of cards. Please start a new game.',
+         });
       }
 
     } else {
@@ -98,8 +112,6 @@ class App extends React.Component {
         //divcontainer:!this.state.divcontainer,
         gameOver: false,
         message: null,
-
-
       });
     }
   }
@@ -316,15 +328,15 @@ class App extends React.Component {
             </table>
 
             <div className="buttondiv">
-              <button className='buttons' id='check' onClick={() => { this.check(); this.flippyHorizontal.toggle(); }}>Check</button>
-              <button className='buttons' id='fold' onClick={() => { this.fold(); this.flippyHorizontal.toggle(); }}>Fold</button>
+              <button className='buttons' id='check' disabled={this.state.buttonDisable} onClick={() => { this.check(); this.flippyHorizontal.toggle(); this.disableButton() }}>Check</button>
+              <button className='buttons' id='fold' disabled={this.state.buttonDisable} onClick={() => { this.fold(); this.flippyHorizontal.toggle();this.disableButton() }}>Fold</button>
             </div>
 
             {
               this.state.gameOver ?
 
                 <div className="buttondiv">
-                  <button className='buttons' id='continue' onClick={() => { this.startNewGame('continue'); this.flippyHorizontal.toggle(); }}>Continue</button>
+                  <button className='buttons' id='continue' disabled={!this.state.buttonDisable} onClick={() => { this.startNewGame('continue'); this.flippyHorizontal.toggle(); this.enableButton() }}>Continue</button>
                 </div>
                 : null
             }

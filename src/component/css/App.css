@@ -162,8 +162,8 @@ p {
   margin-top: 20px;
 }
 
-#check{
-
+#check:disabled,#fold:disabled{
+  display: none;
 }
 
 #fold{
@@ -175,15 +175,14 @@ p {
   align: right;
 }
 
-.dealerHand{
+.dealerHand, .playerHand {
   margin:0 auto;
+  font-size: 26px;
 }
 
-.playerHand{
-  margin:0 auto;
-}
+
 
 .message{
-  margin:20px;
+  margin:1px;
   
 }
