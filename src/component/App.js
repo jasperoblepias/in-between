@@ -16,7 +16,8 @@ class App extends React.Component {
       message: null,
       isDisabled: false,
       buttonDisable: false,
-      buttonEnable: false
+      buttonEnable: false,
+      disableNewGame:false
     };
   }
 
@@ -257,7 +258,13 @@ class App extends React.Component {
           onClick={this.startGame.bind(this)}>Start</button>
         {x && (
           <div className="buttondiv">
-            <button className='buttons' id='newgame' onClick={() => { this.startNewGame(); this.hideRemove(); }}>New Game</button>
+            <button className='buttons' id='newgame' 
+            disabled={this.state.buttonDisable}
+            onClick={() => { this.startNewGame(); 
+            this.hideRemove();
+            this.enableButton() }}>
+              New Game
+              </button>
           </div>
         )}
 
@@ -281,7 +288,6 @@ class App extends React.Component {
                     {this.state.dealer.cards.map((card, i) => {
                       return <CardDealer key={i} number={card.number} suit={card.suit} />
                     })}
-
                   </BackSide >
                 </Flippy>
               </tr>
